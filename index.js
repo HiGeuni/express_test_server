@@ -145,6 +145,11 @@ app.get('/', (request, response) => {
   response.send('Hello World!');
 })
 
+app.get("/test", (req, res) => {
+  const t = process.env.EV;
+  res.send(t)
+})
+
 // server start
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
