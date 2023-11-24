@@ -142,7 +142,7 @@ app.post("/google/access_token", (request, response) => {
 });
 
 app.get('/', (request, response) => {
-  response.send('Hello World!');
+  response.send(`ABC : ${process.env.ABC}`);
 })
 
 app.get("/test", (req, res) => {
