@@ -5,12 +5,19 @@ const qs = require("qs");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const sse = require('sse');
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 
-const PORT = 3000;
+const PORT = 8080;
+
+let count = 1;
 
 const app = express();
+
+const server = http.createServer(app);
+
+sse(server);
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -147,10 +154,27 @@ app.get('/', (request, response) => {
 
 app.get("/test", (req, res) => {
   const t = process.env.EV;
+  console.log(t);
   res.send(t)
 })
 
+app.get("/test2", (req, res) => {
+  count +=1 ;
+  console.log(count);
+  res.send(count.toString());
+})
+
+
+const SSEController = require('./sse');
+const http = require("http");
+
+const controller = new SSEController();
+
+app.get('/start', (req, res) => controller.subscribe(req, res));
+
+app.get('/stop', (req,res) => controller.unsubscribe(res))
+
 // server start
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
